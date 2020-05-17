@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'catalog.apps.CatalogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,8 +75,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'shop_db',
-        'USER': 'shop_db',
-        'PASSWORD': '1234',
+        'USER': 'shop',
+        'PASSWORD': 'shop_p',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

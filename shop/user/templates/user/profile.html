@@ -1,4 +1,4 @@
-{% extends "catalog/main.html" %}
+{% extends "utils/main.html" %}
 
 {% block main_content %}
   <div class="jumbotron">
@@ -14,5 +14,5 @@
       </div>
     </div>
   </div>
-
+  {% include "catalog/items_list.html" with items=items %}
 {% endblock main_content %}

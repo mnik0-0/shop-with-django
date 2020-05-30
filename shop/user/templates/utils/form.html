@@ -1,0 +1,16 @@
+{% csrf_token %}
+{% for field in form %}
+  <div class="form-group">
+    {{ field.label }}
+    {{ field }}
+    <hr>
+    {% if field.errors %}
+        <div class="alert alert-warning">
+          {{ field.errors }}
+        </div>
+    {% endif %}
+  </div>
+{% endfor %}
+{% if submit|default:False %}
+  <button type="submit" class="btn btn-outline-info">Submit</button>
+{% endif %}

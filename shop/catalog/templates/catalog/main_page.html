@@ -1,7 +1,5 @@
 {% extends "utils/main.html" %}
 
 {% block main_content %}
-  <div class="alert alert-primary m-2" role="alert">
-    Loged out
-  </div>
+  {% include "catalog/items_list.html" with items=object_list %}
 {% endblock main_content %}

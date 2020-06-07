@@ -20,5 +20,6 @@ from . import views
 urlpatterns = [
     path('', views.ItemList.as_view(template_name='catalog/main_page.html'), name='index'),
     path('create-item/', views.ItemCreation.as_view(), name ='create-item'),
-    path('item/<str:slug>/', views.ItemDetailView.as_view(), name='item-detail')
+    path('item/<str:slug>/', views.ItemDetailView.as_view(), name='item-detail'),
+    path('item/<str:slug>/update', views.ItemUpdate.as_view(), name='item-update'),
 ]

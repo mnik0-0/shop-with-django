@@ -11,6 +11,7 @@ from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from catalog.models import Item
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -52,6 +53,7 @@ class LoginView(View):
         return render(request, 'user/login.html', {'form': form})
 
 
+@login_required
 def profile(request, slug):
     profile = get_object_or_404(UserProfile, slug=slug)
     items = Item.objects.filter(user=profile.user)

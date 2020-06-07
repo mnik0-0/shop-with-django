@@ -26,14 +26,15 @@
   <div class="p-5">
     <h2 class="featurette-heading">{{ object.title }}</h2>
     <p class="lead">{{ object.description }}</p>
-
-    <a class="btn btn-outline-primary" href="{% url 'profile' item.user.profile.slug %}">User: {{ item.user.username }}</a>
+    {% if user == item.user %}
+      <a class="btn btn-outline-primary" href="{% url 'item-update' item.slug %}">Update</a>
+    {% else %}
+      <a class="btn btn-outline-primary" href="{% url 'profile' item.user.profile.slug %}">User: {{ item.user.username }}</a>
+    {% endif %}
     <div class="row justify-content-end">
-      <small class="text-muted">{{ item.date }}</small>
+      <small class="text-muted">{{ item.date_pub }}</small>
     </div>
-
   </div>
-
 </div>
 
 

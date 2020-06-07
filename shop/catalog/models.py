@@ -13,11 +13,12 @@ class Item(models.Model):
     description = models.TextField(max_length=300)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(default=time.time)
-    date = models.DateField(default=timezone.now)
+    date_pub = models.DateTimeField(default=timezone.now)
+    date_upd = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.title
-
+        
 
 class ItemPhoto(models.Model):
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)

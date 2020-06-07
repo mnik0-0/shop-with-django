@@ -11,6 +11,8 @@ from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
+from . import models
+from django.utils.timezone import now
 
 
 # Create your views here.
@@ -27,8 +29,7 @@ class ItemCreation(LoginRequiredMixin, View):
         form = ItemCreationForm(request.POST)
         form_images = ItemImagesForm(request.POST, request.FILES, request=request)
         if form.is_valid() and form_images.is_valid():
-            item = form.save(user=request.user)
-            print(item)
+            item = models.Item.objects.create(title=form.cleaned_data['title'], description=form.cleaned_data['description'], user=request.user)
             form_images.save_for(item)
             messages.success(request, 'You have uploaded your item')
             return redirect('index')
@@ -38,5 +39,25 @@ class ItemCreation(LoginRequiredMixin, View):
 class ItemList(ListView):
     model = Item
 
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
+
+
+class ItemUpdate(LoginRequiredMixin, View):
+    def get(self, request, slug):
+        item = get_object_or_404(Item, slug__iexact=slug)
+        if request.user != item.user:
+            return redirect('index')
+        form = ItemCreationForm({'title': item.title, 'description': item.description, })
+        return render(request, 'catalog/item_update.html', {'form': form, })
+
+    @transaction.atomic
+    def post(self, request, slug):
+        item = get_object_or_404(Item, slug__iexact=slug)
+        item.date_upd = now()
+        form = ItemCreationForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have update your item')
+            return redirect('index')
+        return render(request, 'catalog/item_update.html', {'form': form, })

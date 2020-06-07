@@ -20,9 +20,6 @@ class ItemCreationForm(forms.ModelForm):
         model = models.Item
         fields = ['title', 'description']
 
-    def save(self, user):
-        return models.Item.objects.create(title=self.cleaned_data['title'], description=self.cleaned_data['description'], user=user)
-
 
 class ItemImagesForm(forms.Form):
     photos = forms.FileField(required=False)

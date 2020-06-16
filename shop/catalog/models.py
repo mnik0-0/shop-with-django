@@ -7,18 +7,40 @@ import time
 
 # Create your models here.
 
+def time_to_str():
+    return str(time.time()).replace('.', '')
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        abstract = True
+
+
+class GlobalTag(Tag):
+    pass
+
+
+class LocalTag(Tag):
+    global_tag = models.ForeignKey(GlobalTag, related_name='local_tags', on_delete=models.SET_NULL, null=True)
+
 
 class Item(models.Model):
     title = models.CharField(max_length=25)
     description = models.TextField(max_length=300)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    slug = models.SlugField(default=time.time)
+    slug = models.SlugField(default=time_to_str)
     date_pub = models.DateTimeField(default=timezone.now)
     date_upd = models.DateTimeField(default=timezone.now)
+    tag = models.ForeignKey(LocalTag, related_name='items', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.title
-        
+
 
 class ItemPhoto(models.Model):
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)

@@ -4,7 +4,7 @@ from django.views.generic import View, ListView, DetailView
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from .forms import ItemCreationForm, ItemImagesForm
-from .models import Item, ItemPhoto
+from .models import Item, ItemPhoto, GlobalTag
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db import transaction
@@ -18,7 +18,7 @@ from django.utils.timezone import now
 # Create your views here.
 
 
-class ItemCreation(LoginRequiredMixin, View):
+class ItemCreationView(LoginRequiredMixin, View):
     def get(self, request):
         form = ItemCreationForm()
         form_images = ItemImagesForm()
@@ -29,21 +29,33 @@ class ItemCreation(LoginRequiredMixin, View):
         form = ItemCreationForm(request.POST)
         form_images = ItemImagesForm(request.POST, request.FILES, request=request)
         if form.is_valid() and form_images.is_valid():
-            item = models.Item.objects.create(title=form.cleaned_data['title'], description=form.cleaned_data['description'], user=request.user)
+            item = models.Item.objects.create(title=form.cleaned_data['title'], description=form.cleaned_data['description'], tag=form.cleaned_data['tag'], user=request.user)
             form_images.save_for(item)
             messages.success(request, 'You have uploaded your item')
             return redirect('index')
         return render(request, 'catalog/item_create.html', {'form': form, 'form_images': form_images})
 
 
-class ItemList(ListView):
+class ItemListView(ListView):
     model = Item
+
+    def get(self, request, tag=None):
+        self.tag = None
+        if tag != None:
+            self.tag = tag
+        return super().get(request)
+
+    def get_queryset(self):
+        if self.tag == None:
+            return super().get_queryset()
+        return get_object_or_404(models.LocalTag, title__iexact=self.tag).items.all()
+
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
 
 
-class ItemUpdate(LoginRequiredMixin, View):
+class ItemUpdateView(LoginRequiredMixin, View):
     def get(self, request, slug):
         item = get_object_or_404(Item, slug__iexact=slug)
         if request.user != item.user:
@@ -61,3 +73,7 @@ class ItemUpdate(LoginRequiredMixin, View):
             messages.success(request, 'You have update your item')
             return redirect('index')
         return render(request, 'catalog/item_update.html', {'form': form, })
+
+
+class TagsListView(ListView):
+    model = GlobalTag

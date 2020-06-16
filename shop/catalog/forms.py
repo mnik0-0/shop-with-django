@@ -8,17 +8,16 @@ from django.utils.text import slugify
 
 
 class ItemCreationForm(forms.ModelForm):
-    title = forms.CharField(max_length=25)
-    description = forms.CharField(max_length=300)
 
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
         self.fields['description'].widget = forms.Textarea(attrs={'class': 'form-control', })
+        self.fields['tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.LocalTag.objects.all().values_list('id', 'title'))
 
     class Meta:
         model = models.Item
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'tag']
 
 
 class ItemImagesForm(forms.Form):

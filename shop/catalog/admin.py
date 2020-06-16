@@ -5,3 +5,6 @@ from .models import *
 
 admin.site.register(Item)
 admin.site.register(ItemPhoto)
+
+admin.site.register(GlobalTag)
+admin.site.register(LocalTag)

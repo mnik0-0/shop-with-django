@@ -24,4 +24,6 @@ urlpatterns = [
     path('item/<str:slug>/update/', views.ItemUpdateView.as_view(), name='item-update'),
     path('tag/<str:tag>/', views.ItemListView.as_view(template_name='catalog/main_page.html'), name='tag'),
     path('tag/', views.TagsListView.as_view(template_name='catalog/tags_list.html'), name='tag-list'),
+    path('create-global-tag/', views.GlobalTagCreationView.as_view(), name='create-global-tag'),
+    path('create-local-tag/', views.LocalTagCreationView.as_view(), name='create-local-tag'),
 ]

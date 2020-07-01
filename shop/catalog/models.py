@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 import time
-
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -12,7 +12,7 @@ def time_to_str():
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=25)
+    title = models.CharField(max_length=25, unique=True)
 
     def __str__(self):
         return self.title
@@ -32,7 +32,7 @@ class LocalTag(Tag):
 class Item(models.Model):
     title = models.CharField(max_length=25)
     description = models.TextField(max_length=300)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     slug = models.SlugField(default=time_to_str)
     date_pub = models.DateTimeField(default=timezone.now)
     date_upd = models.DateTimeField(default=timezone.now)

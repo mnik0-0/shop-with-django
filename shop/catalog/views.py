@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import View, ListView, DetailView
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
-from .forms import ItemCreationForm, ItemImagesForm
-from .models import Item, ItemPhoto, GlobalTag
+from .forms import ItemCreationForm, ItemImagesForm, GlobalTagCreationForm, LocalTagCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db import transaction
@@ -13,6 +12,8 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from . import models
 from django.utils.timezone import now
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from . import mixins
 
 
 # Create your views here.
@@ -37,7 +38,7 @@ class ItemCreationView(LoginRequiredMixin, View):
 
 
 class ItemListView(ListView):
-    model = Item
+    model = models.Item
 
     def get(self, request, tag=None):
         self.tag = None
@@ -52,20 +53,21 @@ class ItemListView(ListView):
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
-    model = Item
+    model = models.Item
 
 
 class ItemUpdateView(LoginRequiredMixin, View):
+
     def get(self, request, slug):
-        item = get_object_or_404(Item, slug__iexact=slug)
+        item = get_object_or_404(models.Item, slug__iexact=slug)
         if request.user != item.user:
             return redirect('index')
-        form = ItemCreationForm({'title': item.title, 'description': item.description, })
+        form = ItemCreationForm(instance=item)
         return render(request, 'catalog/item_update.html', {'form': form, })
 
     @transaction.atomic
     def post(self, request, slug):
-        item = get_object_or_404(Item, slug__iexact=slug)
+        item = get_object_or_404(models.Item, slug__iexact=slug)
         item.date_upd = now()
         form = ItemCreationForm(request.POST, instance=item)
         if form.is_valid():
@@ -76,4 +78,13 @@ class ItemUpdateView(LoginRequiredMixin, View):
 
 
 class TagsListView(ListView):
-    model = GlobalTag
+    model = models.GlobalTag
+
+
+class GlobalTagCreationView(mixins.TagCreationMixin):
+
+    tag_form = GlobalTagCreationForm
+
+class LocalTagCreationView(mixins.TagCreationMixin):
+
+    tag_form = LocalTagCreationForm

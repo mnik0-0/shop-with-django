@@ -8,10 +8,12 @@ from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db import transaction
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from catalog.models import Item
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 # Create your views here.
@@ -42,9 +44,9 @@ class LoginView(View):
     def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=email, password=password)
 
             if user is not None:
                 login(request, user)

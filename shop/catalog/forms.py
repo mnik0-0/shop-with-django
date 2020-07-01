@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from . import models
@@ -38,3 +38,27 @@ class ItemImagesForm(forms.Form):
             models.ItemPhoto(image=image, item=item).save()
         if len(self.cleaned_data['photos']) == 0:
             models.ItemPhoto(item=item).save()
+
+
+
+class GlobalTagCreationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
+
+    class Meta:
+        model = models.GlobalTag
+        fields = ['title']
+
+
+class LocalTagCreationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
+        self.fields['global_tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.GlobalTag.objects.all().values_list('id', 'title'))
+
+    class Meta:
+        model = models.LocalTag
+        fields = ['title', 'global_tag']

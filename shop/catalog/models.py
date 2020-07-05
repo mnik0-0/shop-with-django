@@ -5,6 +5,7 @@ import time
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+
 # Create your models here.
 
 def time_to_str():
@@ -37,6 +38,7 @@ class Item(models.Model):
     date_pub = models.DateTimeField(default=timezone.now)
     date_upd = models.DateTimeField(default=timezone.now)
     tag = models.ForeignKey(LocalTag, related_name='items', on_delete=models.SET_NULL, null=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

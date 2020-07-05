@@ -31,7 +31,14 @@
     {% if user == item.user %}
       <a class="btn btn-outline-secondary" href="{% url 'item-update' item.slug %}">Update</a>
     {% else %}
-      <a class="btn btn-outline-secondary" href="{% url 'profile' item.user.profile.slug %}">User: {{ item.user.username }}</a>
+      <a class="btn btn-outline-secondary" href="{% url 'profile' item.user.profile.slug %}">User: {{ item.user.name }}</a>
+    {% endif %}
+    <hr>
+    {% if user.is_staff and not object.is_active %}
+      <a class="btn btn-outline-secondary" href="{% url 'activate-item' item.slug %}">Activate</a>
+    {% endif %}
+    {% if user.is_staff and object.is_active %}
+      <a class="btn btn-outline-secondary" href="{% url 'disactivate-item' item.slug %}">Disactivate</a>
     {% endif %}
     <div class="row justify-content-end">
       <small class="text-muted">{{ item.date_pub }}</small>

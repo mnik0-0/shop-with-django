@@ -26,4 +26,7 @@ urlpatterns = [
     path('tag/', views.TagsListView.as_view(template_name='catalog/tags_list.html'), name='tag-list'),
     path('create-global-tag/', views.GlobalTagCreationView.as_view(), name='create-global-tag'),
     path('create-local-tag/', views.LocalTagCreationView.as_view(), name='create-local-tag'),
+    path('items-confirm-list/', views.ItemConfirmList.as_view(template_name='catalog/main_page.html'), name='confirm-items'),
+    path('item/<str:slug>/activate', views.activate_item, name='activate-item'),
+    path('item/<str:slug>/disactivate', views.disactivate_item, name='disactivate-item'),
 ]

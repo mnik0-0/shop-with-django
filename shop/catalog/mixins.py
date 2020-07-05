@@ -16,7 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import mixins
 
 
-class TagCreationMixin(UserPassesTestMixin, View):
+class TagCreationMixin(UserPassesTestMixin, LoginRequiredMixin, View):
 
     tag_form = None
 

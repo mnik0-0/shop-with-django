@@ -16,6 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import mixins
 from django.http import Http404
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import user_passes_test
 
 # Create your views here.
 
@@ -49,8 +50,8 @@ class ItemListView(ListView):
 
     def get_queryset(self):
         if self.tag is None:
-            return models.Item.objects.filter(is_active=True)
-        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(is_active=True)
+            return models.Item.objects.filter(is_active=True).order_by('-date_pub')
+        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(is_active=True).order_by('-date_pub')
 
 
 class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
@@ -70,7 +71,7 @@ def activate_item(request, slug):
     item.is_active = True
     item.save()
     messages.success(request, f'Item {item.title} has been activated')
-    return redirect('index')
+    return redirect('confirm-items')
 
 
 @staff_member_required(login_url='login')
@@ -80,14 +81,34 @@ def disactivate_item(request, slug):
     item.is_active = False
     item.save()
     messages.success(request, f'Item {item.title} has been disactivated')
-    return redirect('index')
+    return redirect('confirm-items')
+
+
+@transaction.atomic
+def delete_item(request, slug):
+    item = get_object_or_404(models.Item, slug=slug)
+    if request.user.is_staff or request.user == item.user:
+        item.delete()
+        messages.success(request, f'Item {item.title} has been deleted')
+        return redirect('index')
+    raise Http404
+
+
+@staff_member_required(login_url='login')
+@transaction.atomic
+def delete_tag(request, tag):
+    tag = get_object_or_404(models.LocalTag, title=tag)
+    tag.delete()
+    messages.success(request, f'Tag {tag.title} has been deleted')
+    return redirect('tag-list')
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
     model = models.Item
 
     def get(self, request, slug):
-        if not get_object_or_404(models.Item, slug=slug).is_active and not request.user.is_staff:
+        item = get_object_or_404(models.Item, slug=slug)
+        if not item.is_active and not request.user.is_staff and not request.user == item.user:
             raise Http404
         return super(ItemDetailView, self).get(request, slug)
 
@@ -126,3 +147,8 @@ class GlobalTagCreationView(mixins.TagCreationMixin):
 class LocalTagCreationView(mixins.TagCreationMixin):
 
     tag_form = LocalTagCreationForm
+
+
+@staff_member_required(login_url='login')
+def admin_panel(request):
+    return render(request, 'user/admin_panel.html')

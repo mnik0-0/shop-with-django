@@ -1,0 +1,19 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+
+
+<ul class="list-group">
+  {% for global_tag in object_list %}
+    <li class="list-group-item mt-3">{{ global_tag }}
+      <ul class="list-group mt-3">
+        {% for local_tag in global_tag.local_tags.all %}
+          <li class="list-group-item">{{ local_tag }}<a class="btn btn-danger float-right" href="{% url 'delete-tag' local_tag.title %}" role="button">Delete</a></li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
+
+
+{% endblock main_content %}

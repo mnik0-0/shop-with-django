@@ -62,7 +62,7 @@ class UserProfile(models.Model):
     slug = models.SlugField(max_length=50)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
     @classmethod
     def get(cls, request, slug):

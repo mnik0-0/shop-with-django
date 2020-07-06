@@ -58,7 +58,10 @@ class LoginView(View):
 @login_required
 def profile(request, slug):
     profile = get_object_or_404(UserProfile, slug=slug)
-    items = Item.objects.filter(user=profile.user)
+    if request.user == profile.user or request.user.is_staff:
+        items = Item.objects.filter(user=profile.user).order_by('-date_pub')
+    else:
+        items = Item.objects.filter(user=profile.user).filter(is_active=True).order_by('-date_pub')
     return render(request, 'user/profile.html', {'profile': profile, 'items': items, })
 
 

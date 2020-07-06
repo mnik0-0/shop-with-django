@@ -22,14 +22,17 @@
       <nav class="my-2 my-md-0 mr-md-3">
         <a class="btn btn-outline-primary mr-2" href="{% url 'create-item' %}">Add post</a>
         <a class="btn btn-outline-primary mr-2" href="{% url 'profile' user.profile.slug %}">Profile</a>
-        <a class="btn btn-outline-primary" href="{% url 'logout' %}">Log out</a>
-      </nav>
+        <a class="btn btn-outline-primary mr-2" href="{% url 'logout' %}">Log out</a>
     {% else %}
       <nav class="my-2 my-md-0 mr-md-3">
         <a class="btn btn-outline-primary mr-2" href="{% url 'registration' %}">Sign up</a>
-        <a class="btn btn-outline-primary" href="{% url 'login' %}">Sign in</a>
-      </nav>
+        <a class="btn btn-outline-primary mr-2" href="{% url 'login' %}">Sign in</a>
     {% endif %}
+    {% if user.is_staff %}
+        <a class="btn btn-outline-primary mr-2" href="{% url 'admin-panel' %}">Admin</a>
+    {% endif %}
+        </nav>
+
 
   </div>
   <div class="container mt-2">

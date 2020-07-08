@@ -14,10 +14,11 @@ class ItemCreationForm(forms.ModelForm):
         self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
         self.fields['description'].widget = forms.Textarea(attrs={'class': 'form-control', })
         self.fields['tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.LocalTag.objects.all().values_list('id', 'title'))
+        self.fields['price'].widget = forms.TextInput(attrs={'class': 'form-control', })
 
     class Meta:
         model = models.Item
-        fields = ['title', 'description', 'tag']
+        fields = ['title', 'description', 'tag', 'price']
 
 
 class ItemImagesForm(forms.Form):

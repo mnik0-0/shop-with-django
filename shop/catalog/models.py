@@ -39,6 +39,7 @@ class Item(models.Model):
     date_upd = models.DateTimeField(default=timezone.now)
     tag = models.ForeignKey(LocalTag, related_name='items', on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=False)
+    price = models.PositiveIntegerField()
 
     def __str__(self):
         return self.title

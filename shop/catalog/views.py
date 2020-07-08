@@ -32,7 +32,9 @@ class ItemCreationView(LoginRequiredMixin, View):
         form = ItemCreationForm(request.POST)
         form_images = ItemImagesForm(request.POST, request.FILES, request=request)
         if form.is_valid() and form_images.is_valid():
-            item = models.Item.objects.create(title=form.cleaned_data['title'], description=form.cleaned_data['description'], tag=form.cleaned_data['tag'], user=request.user)
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
             form_images.save_for(item)
             messages.success(request, 'You have uploaded your item')
             return redirect('index')
@@ -91,7 +93,7 @@ def delete_item(request, slug):
         item.delete()
         messages.success(request, f'Item {item.title} has been deleted')
         return redirect('index')
-    raise Http404
+    return redirect('login')
 
 
 @staff_member_required(login_url='login')
@@ -128,6 +130,7 @@ class ItemUpdateView(LoginRequiredMixin, View):
     def post(self, request, slug):
         item = get_object_or_404(models.Item, slug=slug)
         item.date_upd = now()
+        item.is_active = False
         form = ItemCreationForm(request.POST, instance=item)
         if form.is_valid():
             form.save()

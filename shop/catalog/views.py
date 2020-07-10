@@ -17,6 +17,9 @@ from . import mixins
 from django.http import Http404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
+from django.db.models import Max, Min
+from . import utils
 
 # Create your views here.
 
@@ -44,16 +47,28 @@ class ItemCreationView(LoginRequiredMixin, View):
 class ItemListView(ListView):
     model = models.Item
 
+    context_object_name = "data"
+
     def get(self, request, tag=None):
+        self.search = request.GET.get('search', '')
+        self.min = request.GET.get('min')
+        self.max = request.GET.get('max')
         self.tag = None
+
+        if not utils.is_digit(str(self.max)):
+            self.max = models.Item.objects.aggregate(Max('price'))['price__max']
+
+        if not utils.is_digit(str(self.min)):
+            self.min = 0
+
         if tag is not None:
             self.tag = tag
         return super().get(request)
 
     def get_queryset(self):
         if self.tag is None:
-            return models.Item.objects.filter(is_active=True).order_by('-date_pub')
-        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(is_active=True).order_by('-date_pub')
+            return models.Item.objects.filter(is_active=True, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
+        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(is_active=True, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
 
 class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
@@ -62,8 +77,21 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     def test_func(self):
         return self.request.user.is_staff
 
+    def get(self, request, tag=None):
+        self.search = request.GET.get('search', '')
+        self.min = request.GET.get('min')
+        self.max = request.GET.get('max')
+
+        if not utils.is_digit(str(self.max)):
+            self.max = models.Item.objects.aggregate(Max('price'))['price__max']
+
+        if not utils.is_digit(str(self.min)):
+            self.min = 0
+
+        return super().get(request)
+
     def get_queryset(self):
-        return models.Item.objects.filter(is_active=False)
+        return models.Item.objects.filter(is_active=False, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
 
 @staff_member_required(login_url='login')
@@ -113,8 +141,6 @@ class ItemDetailView(LoginRequiredMixin, DetailView):
         if not item.is_active and not request.user.is_staff and not request.user == item.user:
             raise Http404
         return super(ItemDetailView, self).get(request, slug)
-
-
 
 
 class ItemUpdateView(LoginRequiredMixin, View):

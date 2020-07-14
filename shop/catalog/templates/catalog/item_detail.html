@@ -27,21 +27,41 @@
     <h2 class="featurette-heading">{{ object.title }}</h2>
     <p class="lead">{{ object.description }}</p>
     <a class="btn btn-outline-secondary" href="{% url 'tag' item.tag %}">{{ item.tag }}</a>
-    <hr>
     {% if user == item.user %}
       <a class="btn btn-outline-secondary" href="{% url 'item-update' item.slug %}">Update</a>
     {% else %}
       <a class="btn btn-outline-secondary" href="{% url 'profile' item.user.profile.slug %}">User: {{ item.user.name }}</a>
     {% endif %}
-    <hr>
     {% if user.is_staff and not object.is_active %}
       <a class="btn btn-outline-secondary" href="{% url 'activate-item' item.slug %}">Activate</a>
     {% endif %}
     {% if user.is_staff and object.is_active %}
       <a class="btn btn-outline-secondary" href="{% url 'disactivate-item' item.slug %}">Disactivate</a>
     {% endif %}
+    {% if request.user != item.user %}
+      <a class="btn btn-outline-secondary" href="{% url 'chat' item.slug %}">Message</a>
+    {% endif %}
     {% if user.is_staff or user == item.user%}
-      <a class="btn btn-outline-secondary" href="{% url 'delete-item' item.slug %}">Delete</a>
+      <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+      <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Do you want to delete item {{ object }}?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <a class="btn btn-danger" href="{% url 'delete-item' item.slug %}" role="button">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
     {% endif %}
     <div class="row justify-content-end">
       <small class="text-muted">{{ item.date_pub }}</small>

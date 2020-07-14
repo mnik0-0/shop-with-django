@@ -77,7 +77,7 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     def test_func(self):
         return self.request.user.is_staff
 
-    def get(self, request, tag=None):
+    def get(self, request):
         self.search = request.GET.get('search', '')
         self.min = request.GET.get('min')
         self.max = request.GET.get('max')

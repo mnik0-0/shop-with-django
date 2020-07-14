@@ -14,12 +14,10 @@
     <h5 class="my-0 mr-md-auto font-weight-normal"><a class="p-2 text-dark" href="{% url 'index' %}">EasyDeal</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
       <a class="p-2 text-dark" href="{% url 'tag-list' %}">Tags</a>
-      <a class="p-2 text-dark" href="#">link</a>
-      <a class="p-2 text-dark" href="#">link</a>
-      <a class="p-2 text-dark" href="#">link</a>
     </nav>
     {% if user.is_authenticated %}
       <nav class="my-2 my-md-0 mr-md-3">
+        <a class="btn btn-outline-primary mr-2" href="{% url 'chat-list' %}">Chat</a>
         <a class="btn btn-outline-primary mr-2" href="{% url 'create-item' %}">Add post</a>
         <a class="btn btn-outline-primary mr-2" href="{% url 'profile' user.profile.slug %}">Profile</a>
         <a class="btn btn-outline-primary mr-2" href="{% url 'logout' %}">Log out</a>

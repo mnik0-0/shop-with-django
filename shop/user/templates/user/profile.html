@@ -7,7 +7,10 @@
         <div class="d-flex justify-content-between align-items-center w-100">
           <strong class="text-gray-dark">{{ profile.user.name }}</strong>
           {% if profile.user == user %}
+            <div class="">
+              <a class="btn btn-outline-primary mr-3" href="{% url 'change-name' %}">Change name</a>
               <a class="btn btn-outline-primary" href="{% url 'change-slug' %}">Change slug</a>
+            </div>
           {% endif %}
         </div>
         <span class="d-block">user/profile/{{ profile.user.profile.slug }}</span>

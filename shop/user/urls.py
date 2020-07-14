@@ -23,5 +23,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(template_name='user/exit.html'), name='logout'),
     path('change-slug/', views.ChangeSlugView.as_view(), name='change-slug'),
+    path('change-name/', views.ChangeNameView.as_view(), name='change-name'),
     path('profile/<str:slug>/', views.profile, name='profile'),
 ]

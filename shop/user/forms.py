@@ -63,3 +63,16 @@ class ChangeSlugForm(forms.ModelForm):
     class Meta:
         model = models.UserProfile
         fields = ['slug']
+
+
+class ChangeNameForm(forms.ModelForm):
+
+    name = forms.CharField(required=True, max_length=20)
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget = forms.TextInput(attrs={'class': 'form-control', })
+
+    class Meta:
+        model = get_user_model()
+        fields = ['name']

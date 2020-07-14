@@ -21,6 +21,8 @@ from django.db.models import Q
 from django.db.models import Max, Min
 from . import utils
 
+from django.views.decorators.http import require_http_methods
+
 # Create your views here.
 
 
@@ -94,6 +96,7 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return models.Item.objects.filter(is_active=False, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
 
+@require_http_methods(["GET"])
 @staff_member_required(login_url='login')
 @transaction.atomic
 def activate_item(request, slug):
@@ -104,6 +107,7 @@ def activate_item(request, slug):
     return redirect('confirm-items')
 
 
+@require_http_methods(["GET"])
 @staff_member_required(login_url='login')
 @transaction.atomic
 def disactivate_item(request, slug):
@@ -114,6 +118,7 @@ def disactivate_item(request, slug):
     return redirect('confirm-items')
 
 
+@require_http_methods(["GET"])
 @transaction.atomic
 def delete_item(request, slug):
     item = get_object_or_404(models.Item, slug=slug)
@@ -124,6 +129,7 @@ def delete_item(request, slug):
     return redirect('login')
 
 
+@require_http_methods(["GET"])
 @staff_member_required(login_url='login')
 @transaction.atomic
 def delete_tag(request, tag):
@@ -178,6 +184,7 @@ class LocalTagCreationView(mixins.TagCreationMixin):
     tag_form = LocalTagCreationForm
 
 
+@require_http_methods(["GET"])
 @staff_member_required(login_url='login')
 def admin_panel(request):
     return render(request, 'user/admin_panel.html')

@@ -15,7 +15,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test, login_required
 from catalog.models import Item
 
+from django.views.decorators.http import require_http_methods
 
+
+@require_http_methods(["GET"])
 @login_required(login_url='login')
 def chat_list(request):
     chats = models.Chat.objects.filter(users__in=[request.user]).order_by('-last_update')

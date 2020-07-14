@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.admin.views.decorators import staff_member_required
 
+from django.views.decorators.http import require_http_methods
+
 
 # Create your views here.
 
@@ -55,6 +57,7 @@ class LoginView(View):
         return render(request, 'user/login.html', {'form': form})
 
 
+@require_http_methods(["GET"])
 @login_required
 def profile(request, slug):
     profile = get_object_or_404(UserProfile, slug=slug)

@@ -20,4 +20,5 @@ from . import views
 urlpatterns = [
     path('', views.chat_list, name='chat-list'),
     path('<str:slug>/', views.ChatView.as_view(), name='chat'),
+    path('<str:slug>/delete', views.delete_chat, name='delete-chat'),
 ]

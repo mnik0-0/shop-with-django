@@ -76,9 +76,11 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'travisdb',
-        'USER': 'postgres',
-        'PASSWORD': '',
+        'NAME': 'shop_db',
+        'USER': 'shop',
+        'PASSWORD': 'shop_p',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 

@@ -32,9 +32,9 @@ class ChatView(View):
         form = forms.MessageForm()
 
         try:
-            chat = models.Chat.objects.filter(users__in=[request.user]).filter(item=item)[0]
+            chat = get_object_or_404(models.Chat, item=item, users__in=[request.user])
 
-        except IndexError:
+        except Http404:
             if item.user == request.user:
                 raise Http404
             chat = models.Chat.objects.create(item=item)
@@ -48,6 +48,7 @@ class ChatView(View):
                 message.save()
         return render(request, 'chat/chat_view.html', {'chat': chat, 'form': form})
 
+    @transaction.atomic
     def post(self, request, slug):
         form = forms.MessageForm(request.POST)
         item = get_object_or_404(Item, slug=slug)
@@ -61,3 +62,15 @@ class ChatView(View):
             message.save()
             return redirect('chat', slug=slug)
         return render(request, 'chat/chat_view.html', {'chat': chat, 'form': form})
+
+
+
+@require_http_methods(["GET"])
+@transaction.atomic
+def delete_chat(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    chat = get_object_or_404(models.Chat, item=item, users__in=[request.user])
+    chat.users.remove(request.user)
+    if not len(chat.users.all()):
+        chat.delete()
+    return redirect('chat-list')

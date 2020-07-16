@@ -1,13 +1,15 @@
 
 <div class="container">
     <div class="row py-3">
-        <div class="col-3" id="sticky-sidebar">
-            <div class="sticky-top">
-              <form class="text-center border border-light p-5" method="get">
-                {% include "utils/search_form.html" %}
-              </form>
-            </div>
-        </div>
+        {% if not profile %}
+          <div class="col-3" id="sticky-sidebar">
+              <div class="sticky-top">
+                <form class="text-center border border-light p-5" method="get">
+                  {% include "utils/search_form.html" %}
+                </form>
+              </div>
+          </div>
+        {% endif %}
         <div class="col" id="main">
             <div class="album py-5 bg-light">
               <div class="container">
@@ -36,4 +38,15 @@
             </div>
         </div>
     </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
 </div>

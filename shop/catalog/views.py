@@ -48,8 +48,7 @@ class ItemCreationView(LoginRequiredMixin, View):
 
 class ItemListView(ListView):
     model = models.Item
-
-    context_object_name = "data"
+    paginate_by = 12
 
     def get(self, request, tag=None):
         self.search = request.GET.get('search', '')
@@ -75,6 +74,7 @@ class ItemListView(ListView):
 
 class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = models.Item
+    paginate_by = 12
 
     def test_func(self):
         return self.request.user.is_staff

@@ -16,6 +16,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.admin.views.decorators import staff_member_required
 
 from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -65,7 +66,11 @@ def profile(request, slug):
         items = Item.objects.filter(user=profile.user).order_by('-date_pub')
     else:
         items = Item.objects.filter(user=profile.user).filter(is_active=True).order_by('-date_pub')
-    return render(request, 'user/profile.html', {'profile': profile, 'items': items, })
+
+    paginator = Paginator(items, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'user/profile.html', {'profile': profile, 'items': items, 'page_obj': page_obj, })
 
 
 class ChangeSlugView(LoginRequiredMixin, View):

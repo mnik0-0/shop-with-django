@@ -1,0 +1,5 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+  {% include "catalog/items_list.html" with items=object_list %}
+{% endblock main_content %}

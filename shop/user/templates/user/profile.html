@@ -1,0 +1,21 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+  <div class="jumbotron">
+    <div class="pt-3">
+      <div class="pb-3 mb-0 small lh-125 border-bottom border-gray">
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <strong class="text-gray-dark">{{ profile.user.name }}</strong>
+          {% if profile.user == user %}
+            <div class="">
+              <a class="btn btn-outline-primary mr-3" href="{% url 'change-name' %}">Change name</a>
+              <a class="btn btn-outline-primary" href="{% url 'change-slug' %}">Change slug</a>
+            </div>
+          {% endif %}
+        </div>
+        <span class="d-block">user/profile/{{ profile.user.profile.slug }}</span>
+      </div>
+    </div>
+  </div>
+  {% include "catalog/items_list.html" with items=items %}
+{% endblock main_content %}

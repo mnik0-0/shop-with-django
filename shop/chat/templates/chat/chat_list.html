@@ -1,0 +1,72 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+
+{% for chat in chats %}
+  {% if not chat.messages.last.is_read and chat.messages.last.sender != user %}
+    <div class="my-3 p-3 bg-info rounded shadow-sm">
+      <h6 class="pb-2 mb-0">{{ chat.item }}</h6>
+      <div class="text-muted pt-3">
+        <p class="pb-3 mb-0 small lh-125 text-white">
+          <strong class="d-block">{{ chat.messages.last.sender }}</strong>
+          {{ chat.messages.last.text|truncatechars:255 }}
+          <a class="btn btn-danger float-right" href="{% url 'chat' chat.item.slug %}" role="button">Read</a>
+          <button type="button" class="btn btn-danger float-right mr-2" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+          <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Do you want to delete this chat?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <a class="btn btn-danger" href="{% url 'delete-chat' chat.item.slug %}" role="button">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p>
+      </div>
+    </div>
+  {% else %}
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+      <h6 class="pb-2 mb-0">{{ chat.item }}</h6>
+      <div class="text-muted pt-3">
+        <p class="pb-3 mb-0 small lh-125">
+          <strong class="d-block text-gray-dark">{{ chat.messages.last.sender }}</strong>
+          {{ chat.messages.last.text|truncatechars:255 }}
+          <a class="btn btn-info float-right" href="{% url 'chat' chat.item.slug %}" role="button">Write</a>
+          <button type="button" class="btn btn-danger float-right mr-2" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+          <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Do you want to delete this chat?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <a class="btn btn-danger" href="{% url 'delete-chat' chat.item.slug %}" role="button">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+
+{% endblock main_content %}

@@ -1,0 +1,21 @@
+language: python
+
+dist: bionic
+
+services:
+  - postgresql
+
+python:
+  - "3.7"
+  - "3.8" 
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - psql -c "create database travisdb;" -U  postgres
+  - python shop/manage.py migrate --noinput
+
+script:
+  - cd shop
+  - python3 manage.py test

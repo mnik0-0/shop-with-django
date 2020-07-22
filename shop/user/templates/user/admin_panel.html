@@ -1,0 +1,13 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+
+<ul class="list-group">
+  <a href='{% url 'confirm-items' %}'><li class="list-group-item">Items to confirm</li></a>
+  <a href='{% url 'create-global-tag' %}'><li class="list-group-item">Create global tag</li></a>
+  <a href='{% url 'create-local-tag' %}'><li class="list-group-item">Create local tag</li></a>
+  <a href='{% url 'delete-tag-list' %}'><li class="list-group-item">Delete local tags</li></a>
+</ul>
+
+
+{% endblock main_content %}

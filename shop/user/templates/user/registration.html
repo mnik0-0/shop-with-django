@@ -1,0 +1,7 @@
+{% extends "utils/main.html" %}
+
+{% block main_content %}
+<form method="post">
+  {% include "utils/form.html" with form=form submit=True %}
+</form>
+{% endblock main_content %}

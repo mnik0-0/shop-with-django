@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.test import Client
 from user.models import User
-from catalog import models
 from django.shortcuts import get_object_or_404
-from django.http import Http404
 
 
 class TestUrls(TestCase):
@@ -15,7 +13,6 @@ class TestUrls(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.client = Client()
-
 
     def test_registration_response(self):
         response = self.client.get('/user/registration/')

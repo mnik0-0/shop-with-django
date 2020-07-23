@@ -14,6 +14,7 @@ class Chat(models.Model):
     def __str__(self):
         return self.item.title
 
+
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='send_messages', on_delete=models.CASCADE)

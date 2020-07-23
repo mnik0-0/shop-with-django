@@ -2,8 +2,6 @@ from django.test import TestCase
 from django.test import Client
 from user.models import User
 from catalog import models as catalog
-from django.shortcuts import get_object_or_404
-from django.http import Http404
 from chat import models
 
 

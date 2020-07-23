@@ -1,10 +1,5 @@
-from django.conf import settings
-from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from . import models
-from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ValidationError
-from django.utils.text import slugify
 
 
 class ItemCreationForm(forms.ModelForm):

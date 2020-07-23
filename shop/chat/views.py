@@ -1,20 +1,12 @@
 from django.shortcuts import render, redirect
-
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from . import forms
-from django.contrib import messages
 from django.db import transaction
-
 from . import models
-from django.utils.timezone import now
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 from django.http import Http404
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import login_required
 from catalog.models import Item
-
 from django.views.decorators.http import require_http_methods
 
 
@@ -62,7 +54,6 @@ class ChatView(View):
             message.save()
             return redirect('chat', slug=slug)
         return render(request, 'chat/chat_view.html', {'chat': chat, 'form': form})
-
 
 
 @require_http_methods(["GET"])

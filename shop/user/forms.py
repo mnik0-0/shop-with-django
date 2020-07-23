@@ -1,12 +1,11 @@
-from django.conf import settings
 from django import forms
 from . import models
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from .models import UserProfile
 from django.contrib.auth import get_user_model
-
 from django.contrib.auth.forms import UserCreationForm
+
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email', error_messages={'exists': 'Oops'})

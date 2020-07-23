@@ -1,26 +1,18 @@
 from django.shortcuts import render, redirect
-
 from django.views.generic import View, ListView, DetailView
 from django.shortcuts import get_object_or_404
-from django.utils.text import slugify
 from .forms import ItemCreationForm, ItemImagesForm, GlobalTagCreationForm, LocalTagCreationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
 from django.db import transaction
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
-from django.core.files.base import ContentFile
 from . import models
 from django.utils.timezone import now
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import mixins
 from django.http import Http404
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.db.models import Max, Min
+from django.db.models import Max
 from . import utils
-
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.

@@ -1,20 +1,14 @@
 from django.shortcuts import render, redirect
-
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
-from django.utils.text import slugify
 from .forms import RegistrationForm, LoginForm, ChangeSlugForm, ChangeNameForm
 from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db import transaction
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import ValidationError
+from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog.models import Item
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.contrib.admin.views.decorators import staff_member_required
-
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 

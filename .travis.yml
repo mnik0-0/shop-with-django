@@ -28,3 +28,4 @@ env:
 script:
   - cd shop
   - python3 manage.py test
+  - flake8

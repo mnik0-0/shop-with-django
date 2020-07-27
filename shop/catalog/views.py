@@ -15,6 +15,7 @@ from django.db.models import Max
 from . import utils
 from django.views.decorators.http import require_http_methods
 
+
 # Create your views here.
 
 
@@ -60,8 +61,11 @@ class ItemListView(ListView):
 
     def get_queryset(self):
         if self.tag is None:
-            return models.Item.objects.filter(is_active=True, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
-        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(is_active=True, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
+            return models.Item.objects.filter(is_active=True, price__range=[self.min, self.max]).filter(
+                Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
+        return models.Item.objects.filter(tag=get_object_or_404(models.LocalTag, title__iexact=self.tag)).filter(
+            is_active=True, price__range=[self.min, self.max]).filter(
+            Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
 
 class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
@@ -85,7 +89,8 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return super().get(request)
 
     def get_queryset(self):
-        return models.Item.objects.filter(is_active=False, price__range=[self.min, self.max]).filter(Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
+        return models.Item.objects.filter(is_active=False, price__range=[self.min, self.max]).filter(
+            Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
 
 @require_http_methods(["GET"])
@@ -168,11 +173,10 @@ class TagsListView(ListView):
 
 
 class GlobalTagCreationView(mixins.TagCreationMixin):
-
     tag_form = GlobalTagCreationForm
 
-class LocalTagCreationView(mixins.TagCreationMixin):
 
+class LocalTagCreationView(mixins.TagCreationMixin):
     tag_form = LocalTagCreationForm
 
 

@@ -1,6 +1,6 @@
 def is_digit(string):
     if string.isdigit():
-       return True
+        return True
     else:
         try:
             float(string)

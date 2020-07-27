@@ -65,7 +65,6 @@ class ChangeSlugForm(forms.ModelForm):
 
 
 class ChangeNameForm(forms.ModelForm):
-
     name = forms.CharField(required=True, max_length=20)
 
     def __init__(self, *args, **kwargs):

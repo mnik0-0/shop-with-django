@@ -8,7 +8,8 @@ class ItemCreationForm(forms.ModelForm):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
         self.fields['description'].widget = forms.Textarea(attrs={'class': 'form-control', })
-        self.fields['tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.LocalTag.objects.all().values_list('id', 'title'))
+        self.fields['tag'].widget = forms.Select(attrs={'class': 'form-control', },
+                                                 choices=models.LocalTag.objects.all().values_list('id', 'title'))
         self.fields['price'].widget = forms.TextInput(attrs={'class': 'form-control', })
 
     class Meta:
@@ -36,7 +37,6 @@ class ItemImagesForm(forms.Form):
             models.ItemPhoto(item=item).save()
 
 
-
 class GlobalTagCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -53,7 +53,9 @@ class LocalTagCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
-        self.fields['global_tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.GlobalTag.objects.all().values_list('id', 'title'))
+        self.fields['global_tag'].widget = forms.Select(attrs={'class': 'form-control', },
+                                                        choices=models.GlobalTag.objects.all().values_list('id',
+                                                                                                           'title'))
 
     class Meta:
         model = models.LocalTag

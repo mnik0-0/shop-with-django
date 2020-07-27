@@ -12,18 +12,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
-import sys
-
 
 root = environ.Path(__file__) - 2
 env = environ.Env()
 environ.Env.read_env(env_file=os.path.join(root, '.env'))
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SITE_ROOT = root()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -137,5 +133,5 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'user.User'
 
 AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )

@@ -3,13 +3,14 @@ from django.conf import settings
 from django.utils.timezone import now
 from catalog.models import Item
 
+
 # Create your models here.
 
 
 class Chat(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chats')
     item = models.ForeignKey(Item, related_name='chats', on_delete=models.CASCADE)
-    last_update =  models.DateTimeField(auto_now=now)
+    last_update = models.DateTimeField(auto_now=now)
 
     def __str__(self):
         return self.item.title

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import *
+from . import models
 
 # Register your models here.
 
-admin.site.register(Item)
-admin.site.register(ItemPhoto)
+admin.site.register(models.Item)
+admin.site.register(models.ItemPhoto)
 
-admin.site.register(GlobalTag)
-admin.site.register(LocalTag)
+admin.site.register(models.GlobalTag)
+admin.site.register(models.LocalTag)

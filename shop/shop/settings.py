@@ -11,18 +11,29 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+import sys
+
+
+root = environ.Path(__file__) - 2
+env = environ.Env()
+environ.Env.read_env(env_file=os.path.join(root, '.env'))
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+SITE_ROOT = root()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(okb+8w3!%^a*1t+)bjj5=rgo0kcitg!17)%*f1h!ey=5+wgj+'
+SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -73,14 +84,7 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'travisdb',
-        'USER': 'postgres',
-        'PASSWORD': '',
-    }
-}
+DATABASES = {'default': env.db('DATABASE_URL')}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

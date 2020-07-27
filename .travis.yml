@@ -13,8 +13,17 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c "create database travisdb;" -U  postgres
+  - psql -c "CREATE DATABASE test;" -U postgres
+  - psql -c "CREATE USER test with encrypted password 'test';" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON DATABASE test TO test;" -U postgres
+  - psql -c "ALTER USER test createdb;" -U postgres
   - python shop/manage.py migrate --noinput
+
+env:
+  global:
+    - DEBUG=on
+    - SECRET_KEY="secret"
+    - DATABASE_URL=psql://test:test@127.0.0.1:5432/test
 
 script:
   - cd shop

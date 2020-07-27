@@ -19,35 +19,36 @@ git clone https://github.com/mnik0-0/shop-with-django
 ```
 
 ### Install requirements.txt 
-Go to project directory and run
+First create new **virtualenv**
+```
+virtualenv your-virtualenv
+```
+Than activate it with
+```
+. ./your-virtualenv/bin/activate
+```
+Finally, go to project directory and run
 ```
 pip install -r requirements.txt
 ```
 
-### Create and connect Database
-##### I use Postgresql in this project
-##### So by default in settings you an see
-```
-    'NAME': 'travisdb',
-    'USER': 'postgres',
-    'PASSWORD': '',
-```
-##### But I reccomend you to replace it with 
-```
-    'NAME': 'your_database',
-    'USER': 'your_username',
-    'PASSWORD': 'your_password',
-    'HOST': '127.0.0.1',
-    'PORT': '5432', #default port
-```
-##### Than
+#### Create Database for project
 ```
 sudo -u postgres psql
 ```
 ```
-CREATE DATABASE your_database;
-CREATE USER your_username WITH password 'your_password';
-GRANT ALL ON DATABASE your_database TO your_username;
+CREATE DATABASE test
+CREATE USER test with encrypted password 'test'
+GRANT ALL PRIVILEGES ON DATABASE test TO test;
+ALTER USER test createdb;
+```
+
+### Setup django-environ
+Now you need to create **.env** file near **manage.py**
+```
+DEBUG=on
+SECRET_KEY="secret"
+DATABASE_URL=psql://test:test@127.0.0.1:5432/test
 ```
 
 ##### And finaly you will need to make migrations
@@ -59,5 +60,11 @@ python3 manage.py migrate
 ## You are ready to run your local server
 ```
 python3 manage.py runsever
+```
+***
+### Testing
+To test  project just use
+```
+python3 manage.py test
 ```
 ***

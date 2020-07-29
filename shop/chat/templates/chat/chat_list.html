@@ -1,9 +1,11 @@
 {% extends "utils/main.html" %}
 
 {% block main_content %}
+{% if chats %}
+  {% for chat in chats %}
+  {% if chat.messages.last %}
 
-{% for chat in chats %}
-  {% if not chat.messages.last.is_read and chat.messages.last.sender != user %}
+    {% if not chat.messages.last.is_read and chat.messages.last.sender != user %}
     <div class="my-3 p-3 bg-info rounded shadow-sm">
       <h6 class="pb-2 mb-0">{{ chat.item }}</h6>
       <div class="text-muted pt-3">
@@ -34,7 +36,7 @@
         </p>
       </div>
     </div>
-  {% else %}
+    {% else %}
     <div class="my-3 p-3 bg-white rounded shadow-sm">
       <h6 class="pb-2 mb-0">{{ chat.item }}</h6>
       <div class="text-muted pt-3">
@@ -65,8 +67,20 @@
         </p>
       </div>
     </div>
+    {% endif %}
+  {% else %}
+  <div class="container text-center mt-5">
+    <p class="lead">You don't have chat rooms available.</p>
+  </div>
   {% endif %}
-{% endfor %}
+  {% endfor %}
+
+{% else %}
+<div class="container text-center mt-5">
+  <p class="lead">You don't have chat rooms available.</p>
+</div>
+{% endif %}
+
 
 
 {% endblock main_content %}

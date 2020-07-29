@@ -10,7 +10,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog.models import Item
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.core.paginator import Paginator
 
 
 # Create your views here.

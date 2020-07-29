@@ -53,7 +53,9 @@ class LocalTagCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget = forms.TextInput(attrs={'class': 'form-control', 'rows': '3'})
-        self.fields['global_tag'].widget = forms.Select(attrs={'class': 'form-control', }, choices=models.GlobalTag.objects.all().values_list('id', 'title'))
+        self.fields['global_tag'].widget = forms.Select(attrs={'class': 'form-control', },
+                                                        choices=models.GlobalTag.objects.all().values_list('id',
+                                                                                                           'title'))
 
     class Meta:
         model = models.LocalTag

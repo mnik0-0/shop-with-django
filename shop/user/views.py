@@ -61,10 +61,7 @@ def profile(request, slug):
     else:
         items = Item.objects.filter(user=profile.user).filter(is_active=True).order_by('-date_pub')
 
-    paginator = Paginator(items, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'user/profile.html', {'profile': profile, 'items': items, 'page_obj': page_obj, })
+    return render(request, 'user/profile.html', {'profile': profile, 'items': items})
 
 
 class ChangeSlugView(LoginRequiredMixin, View):

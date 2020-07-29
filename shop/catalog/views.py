@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView, DetailView
 from django.shortcuts import get_object_or_404
-from .forms import ItemCreationForm, ItemImagesForm, GlobalTagCreationForm, LocalTagCreationForm
+from .forms import ItemCreationForm, ItemImagesForm, GlobalTagCreationForm, LocalTagCreationForm, SearchForm
 from django.contrib import messages
 from django.db import transaction
 from . import models
@@ -44,6 +44,7 @@ class ItemListView(ListView):
     paginate_by = 12
 
     def get(self, request, tag=None):
+        self.form = SearchForm(request.GET)
         self.search = request.GET.get('search', '')
         self.min = request.GET.get('min')
         self.max = request.GET.get('max')
@@ -67,6 +68,11 @@ class ItemListView(ListView):
             is_active=True, price__range=[self.min, self.max]).filter(
             Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
 
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        context.update({'form': self.form})
+        return context
+
 
 class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = models.Item
@@ -76,6 +82,7 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return self.request.user.is_staff
 
     def get(self, request):
+        self.form = SearchForm(request.GET)
         self.search = request.GET.get('search', '')
         self.min = request.GET.get('min')
         self.max = request.GET.get('max')
@@ -91,6 +98,11 @@ class ItemConfirmList(UserPassesTestMixin, LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Item.objects.filter(is_active=False, price__range=[self.min, self.max]).filter(
             Q(title__contains=self.search) | Q(description__contains=self.search)).order_by('-date_pub')
+
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        context.update({'form': self.form})
+        return context
 
 
 @require_http_methods(["GET"])

@@ -1,10 +1,8 @@
 <form class="text-center border border-light p-5" method="get">
 
-    <input type="text" class="form-control mb-4" placeholder="Search" name='search'>
-
-    <input type="text" class="form-control mb-4" placeholder="Min price" name='min'>
-
-    <input type="text"class="form-control mb-4" placeholder="Max price"  name='max'>
+    {{ form.search }}
+    {{ form.min }}
+    {{ form.max }}
 
     <button class="btn btn-info btn-block my-4" type="submit">Filter</button>
 
